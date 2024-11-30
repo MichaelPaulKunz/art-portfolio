@@ -1,45 +1,33 @@
-let scrollContainer = document.querySelector('.gallery');
-let backBtn = document.getElementById('backBtn');
-let nextBtn = document.getElementById('nextBtn');
+// side scrolling behavior
+const scrollContainers = document.getElementsByClassName('gallery');
+const backBtns = document.getElementsByClassName('backBtn');
+const nextBtns = document.getElementsByClassName('nextBtn');
 
-nextBtn.addEventListener('click', () => {
-  scrollContainer.style.scrollBehavior = 'smooth';
-  scrollContainer.scrollLeft += 225;
+const scrollArray = Array.from(scrollContainers);
+const backArray = Array.from(backBtns);
+const nextArray = Array.from(nextBtns);
+
+scrollArray.forEach((scroll, index) => {
+  backArray[index].addEventListener('click', () => {
+    scroll.style.behavior = 'smooth';
+    scroll.scrollLeft -= 225;
+  })
+  nextArray[index].addEventListener('click', () => {
+    scroll.style.scrollBehavior = 'smooth';
+    scroll.scrollLeft += 225;
+  })
 });
 
-backBtn.addEventListener('click', () => {
-  scrollContainer.style.scrollBehavior = 'smooth';
-  scrollContainer.scrollLeft -= 225;
-})
-
-let scrollContainer_2 = document.querySelector('#gallery_2');
-let backBtn_2 = document.getElementById('backBtn_2');
-let nextBtn_2 = document.getElementById('nextBtn_2');
-
-scrollContainer_2.addEventListener('wheel', (e) => {
-  e.defaultPrevented();
-  scrollContainer_2.scrollLeft += e.deltaY;
-  scrollContainer_2.style.scrollBehavior = 'auto';
-});
-
-nextBtn_2.addEventListener('click', () => {
-  scrollContainer_2.style.scrollBehavior = 'smooth';
-  scrollContainer_2.scrollLeft += 225;
-});
-
-backBtn_2.addEventListener('click', () => {
-  scrollContainer_2.style.scrollBehavior = 'smooth';
-  scrollContainer_2.scrollLeft -= 225;
-})
-
-// image modal
+// image modal behavior
 let modalImageContainer;
 let modalTitleContainer;
 let modalImage;
+let isModalShowing = false;
 const modal = document.getElementById("myModal");
 const exitModal = document.getElementById("exitModal");
-// When the user clicks on <span> (x)
+// exit modal from X button
 exitModal.onclick = function() {
+  isModalShowing = false;
   modal.style.display = "none";
   const image = document.getElementById('myModalImage');
   const title = document.getElementById('title');
@@ -47,8 +35,9 @@ exitModal.onclick = function() {
   modalTitleContainer.removeChild(title);
 }
 
-// When the user clicks anywhere outside of the modal, close it
+// exit modal by clicking outside of it
 window.onclick = function(event) {
+  isModalShowing = false;
   if (event.target == modal) {
     modal.style.display = "none";
     const image = document.getElementById('myModalImage');
@@ -58,18 +47,34 @@ window.onclick = function(event) {
   }
 }
 
-// When the user clicks the thumnbail, enlarged modal pops up
+// click thumbnail, get modal
 const thumbnails = document.getElementsByClassName('thumb');
 const thumbs = Array.from(thumbnails);
 thumbs.forEach(thumb => {
   thumb.onclick = function() {
+    isModalShowing = true;
     modal.style.display = "block";
     modalImageContainer = document.getElementById("modalImageContainer");
     modalTitleContainer = document.getElementById("modalTitleContainer");
     modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${thumb.alt}</h2>`;
-    modalImageContainer.innerHTML += `<img class='modal-image' src=${thumb.src} id='myModalImage'>`;
+    modalImageContainer.innerHTML += `<a id='myModalImage' href=${thumb.src}><img class='modal-image' src=${thumb.src}></a>`;
     // resize for phone
-    const screenWidth = window.screen.width;
+    imageResize();
+  }
+});
+
+// resize modal when screen size changes
+window.addEventListener("resize", () => {
+  if (isModalShowing) {
+    imageResize()
+  }
+});
+
+
+
+// helper functions
+function imageResize() {
+  const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
     const pictureFrame = document.getElementsByClassName('modal-content')[0];
     if (screenHeight > screenWidth) {
@@ -87,7 +92,6 @@ thumbs.forEach(thumb => {
       setTimeout(function(){
         const pictureItself = document.getElementsByClassName('modal-image')[0];
         pictureItself.style.maxHeight = '555px';
-     }, 1);
+     }, 0);
     }
-  }
-});
+}

@@ -63,15 +63,19 @@ body {
   border-radius: 55px;
   background-image: linear-gradient(to right, #8360, #241825);
   max-height: 290px;
+
+}
+
+.bio-scroll {
+  overflow-y: scroll;
+  overflow-x: none;
 }
 
 .bio-container {
-  overflow-y: scroll;
-  overflow-x: none;
   margin: auto 5%;
 }
 
-.bio-container::-webkit-scrollbar {
+.bio-scroll::-webkit-scrollbar {
   display: none;
 }
 
@@ -131,7 +135,7 @@ body {
   justify-content: center;
 }
 
-#backBtn, #nextBtn, #backBtn_2, #nextBtn_2 {
+.backBtn, .nextBtn {
   width: 50px;
   cursor: pointer;
   margin: 15px;
@@ -164,7 +168,7 @@ body {
   /* padding: 10px; */
   padding-top: 0;
   border: 1px solid #888;
-  width:fit-content
+  width:fit-content;
   /* align-items: center; */
 }
 .modal-image-container {
@@ -196,7 +200,12 @@ body {
   align-items: center;
   float: none;
 }
-/* The Close Button */
+
+.click-for-full {
+  text-align: center;
+
+}
+
 .close {
   color: #f00909;
   float: right;
