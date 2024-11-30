@@ -1,0 +1,212 @@
+* {
+  margin: 0;
+  padding : 0;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(to right, #8360, #241825);
+}
+
+.banner-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  max-height: 300px;
+
+}
+
+.banner {
+  filter: grayscale(50%);
+  border-radius: 55px;
+}
+
+.info-container {
+  display: flex;
+  justify-content: center;
+}
+
+.name-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.artist-name {
+  width: 100%;
+  text-align: center;
+}
+
+.gender {
+  width: 100%;
+  text-align: center;
+  /* font-size: small; */
+  font-style: italic;
+}
+
+.avatar {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 100px;
+  float: left;
+  margin: auto 0;
+}
+
+.artist-info {
+  display: flex;
+  justify-content: center;
+  margin: 5px 120px;
+  /* background-color:#241825; */
+  padding-bottom: 0%;
+  width: 851px;
+  border-radius: 55px;
+  background-image: linear-gradient(to right, #8360, #241825);
+  max-height: 290px;
+}
+
+.bio-container {
+  overflow-y: scroll;
+  overflow-x: none;
+  margin: auto 5%;
+}
+
+.bio-container::-webkit-scrollbar {
+  display: none;
+}
+
+.bio {
+  min-width: 60%;
+  min-height: 200px;
+  float: right;
+
+  color: white;
+  margin: 5%;
+}
+
+.gallery {
+  width: 650px;
+  display: flex;
+  overflow-x: scroll;
+}
+
+.gallery-with-title {
+  margin: 2% auto 5% auto;
+}
+
+.gallery-title-container {
+  width: 100%;
+}
+
+.gallery-title {
+  width:fit-content;
+  /* text-align: left; */
+}
+
+.gallery div {
+  width: 100;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 20px;
+  padding: 10px;
+  flex: none;
+}
+
+.gallery div img {
+  width: 100%;
+  filter: grayscale(75%);
+  transition: transform 0.5s;
+  opacity: 0.7;
+  max-height: 200px;
+  width: 200px;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#backBtn, #nextBtn, #backBtn_2, #nextBtn_2 {
+  width: 50px;
+  cursor: pointer;
+  margin: 15px;
+}
+
+.gallery div img:hover {
+  filter: grayscale(0);
+  cursor: pointer;
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin:  5px auto;
+  /* padding: 10px; */
+  padding-top: 0;
+  border: 1px solid #888;
+  width:fit-content
+  /* align-items: center; */
+}
+.modal-image-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2%;
+  padding: 2%;
+}
+
+.modal-image {
+  text-align: center;
+  align-items: center;
+  float: none;
+  max-height: 555px;
+}
+
+.modalTitleContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2%;
+  padding: 2%;
+}
+
+.modal-title {
+  /* justify-content: center; */
+  text-align: center;
+  align-items: center;
+  float: none;
+}
+/* The Close Button */
+.close {
+  color: #f00909;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
