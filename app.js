@@ -1,11 +1,17 @@
-/* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
-function myFunction() {
-  var x = document.getElementById("myLinks");
-  if (x.style.display === "block") {
-    x.style.display = "none";
+// toglge hamburger menu
+let isDropdownShowing = false;
+const topNav = document.getElementById('topNav');
+const dropDown = document.getElementById('dropDown');
+const backdrop = document.getElementById('dropdownBackdrop');
+topNav.onclick = function() {
+  if (isDropdownShowing) {
+    dropDown.style.display = 'none';
+    backdrop.style.display = 'none';
   } else {
-    x.style.display = "block";
+    dropDown.style.display = 'block';
+    backdrop.style.display = 'block';
   }
+  isDropdownShowing = !isDropdownShowing;
 }
 
 // side scrolling behavior
@@ -45,15 +51,22 @@ exitModal.onclick = function() {
   modalTitleContainer.removeChild(title);
 }
 
-// exit modal by clicking outside of it
+// exit modal and dropdown by clicking outside of it
 window.onclick = function(event) {
-  isModalShowing = false;
   if (event.target == modal) {
+    isModalShowing = false;
     modal.style.display = "none";
     const image = document.getElementById('myModalImage');
     const title = document.getElementById('title');
     modalImageContainer.removeChild(image);
     modalTitleContainer.removeChild(title);
+
+  }
+
+  if (event.target == backdrop) {
+    isDropdownShowing = false;
+    dropDown.style.display = 'none';
+    backdrop.style.display = 'none';
   }
 }
 
