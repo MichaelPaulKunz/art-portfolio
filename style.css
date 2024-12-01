@@ -1,6 +1,6 @@
 * {
   margin: 0;
-  padding : 0;
+  padding: 0;
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
 }
@@ -9,12 +9,96 @@ body {
   background-image: linear-gradient(to right, #8360, #241825);
 }
 
+.hamburger {
+  width: 50px;
+  height: 10px;
+  background-color: black;
+  margin: 6px 40px;
+}
+
+.top-nav-button {
+  text-align: center;
+  cursor: pointer;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  margin: 65px 65px;
+  position: absolute;
+  z-index: 2;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+}
+
+.top-menu {
+  display: none;
+  /* Hidden by default */
+  z-index: 2;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+.top-menu-content {
+  z-index: 1;
+  min-width:fit-content;
+  min-height: fit-content;
+  background-color: white;
+  position: absolute;
+  left: 70px;
+  top: 45px;
+  border-width: 2px;
+  border-style: groove;
+  border-color: black;
+  border-radius: 40px;
+  display: flex;
+  justify-content: right;
+  flex-direction: column;
+}
+
+.top-menu-list {
+  margin-left: 18px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  list-style: none;
+  clear: right;
+}
+.hamburger-offset {
+  margin-top: 100px;
+}
+
+.top-menu div
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar-item {
+  font-size: large;
+  margin: 40px 13px 15px 15px;
+}
+
+
 .banner-container {
   display: flex;
   justify-content: center;
   margin: 20px auto;
   max-height: 300px;
-
+  min-height: 300px;
+  position: relative;
 }
 
 .banner {
@@ -103,7 +187,7 @@ body {
 }
 
 .gallery-title {
-  width:fit-content;
+  width: fit-content;
   /* text-align: left; */
 }
 
@@ -135,7 +219,8 @@ body {
   justify-content: center;
 }
 
-.backBtn, .nextBtn {
+.backBtn,
+.nextBtn {
   width: 50px;
   cursor: pointer;
   margin: 15px;
@@ -148,29 +233,39 @@ body {
   opacity: 1;
 }
 
+
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin:  5px auto;
+  margin: 5px auto;
   /* padding: 10px; */
   padding-top: 0;
   border: 1px solid #888;
-  width:fit-content;
+  width: fit-content;
   /* align-items: center; */
 }
+
 .modal-image-container {
   display: flex;
   justify-content: center;
