@@ -164,7 +164,7 @@ function imageResize() {
     const pictureFrame = document.getElementsByClassName('modal-content')[0];
     if (screenHeight > screenWidth) {
       // recenter image for portrait
-      pictureFrame.style.margin = '50% auto';
+      pictureFrame.style.margin = '40% auto';
       // resize image for portrait
       setTimeout(function(){
         const pictureItself = document.getElementsByClassName('modal-image')[0];
@@ -173,6 +173,7 @@ function imageResize() {
     } else {
       // recenter image for landscape
       pictureFrame.style.margin = '5px auto;';
+      pictureFrame.style.padding = '10px';
       // resize image for landscape
       setTimeout(function(){
         const pictureItself = document.getElementsByClassName('modal-image')[0];
