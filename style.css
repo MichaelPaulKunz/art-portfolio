@@ -3,6 +3,7 @@
   padding: 0;
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -31,6 +32,7 @@ body {
 }
 
 .top-menu {
+  /* transition: all .3s ease; */
   display: none;
   /* Hidden by default */
   z-index: 2;
@@ -50,6 +52,7 @@ body {
 }
 
 .top-menu-content {
+  /* transition: all .3s ease; */
   z-index: 1;
   min-width:fit-content;
   min-height: fit-content;

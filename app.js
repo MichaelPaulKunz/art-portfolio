@@ -1,4 +1,4 @@
-// toglge hamburger menu
+// toggle hamburger menu
 let isDropdownShowing = false;
 const topNav = document.getElementById('topNav');
 const dropDown = document.getElementById('dropDown');
@@ -8,12 +8,11 @@ topNav.onclick = function() {
     dropDown.style.display = 'none';
     backdrop.style.display = 'none';
   } else {
-    dropDown.style.display = 'block';
     backdrop.style.display = 'block';
+    dropDown.style.display = 'block';
   }
   isDropdownShowing = !isDropdownShowing;
 }
-
 // side scrolling behavior
 const scrollContainers = document.getElementsByClassName('gallery');
 const backBtns = document.getElementsByClassName('backBtn');
