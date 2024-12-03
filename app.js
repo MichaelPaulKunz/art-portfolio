@@ -48,6 +48,11 @@ exitModal.onclick = function() {
   const title = document.getElementById('title');
   modalImageContainer.removeChild(image);
   modalTitleContainer.removeChild(title);
+
+  currentGallery.style.overflowX = 'scroll';
+  imagesInCurrentGallery = [];
+  currentGallery = {};
+  currentImage = '';
 }
 
 // exit modal and dropdown by clicking outside of it
@@ -60,6 +65,11 @@ window.onclick = function(event) {
     modalImageContainer.removeChild(image);
     modalTitleContainer.removeChild(title);
 
+
+    currentGallery.style.overflowX = 'scroll';
+    imagesInCurrentGallery = [];
+    currentGallery = {};
+    currentImage = '';
   }
 
   if (event.target == backdrop) {
@@ -72,6 +82,8 @@ window.onclick = function(event) {
 // click thumbnail, get modal
 const thumbnails = document.getElementsByClassName('thumb');
 const thumbs = Array.from(thumbnails);
+let imagesInCurrentGallery = [];
+let currentGallery, currentImage;
 thumbs.forEach(thumb => {
   thumb.onclick = function() {
     isModalShowing = true;
@@ -82,17 +94,68 @@ thumbs.forEach(thumb => {
     modalImageContainer.innerHTML += `<a id='myModalImage' href=${thumb.src}><img class='modal-image' src=${thumb.src}></a>`;
     // resize for phone
     imageResize();
+    // get gallery info for scrolling
+    getGallery(thumb);
+    getImages(currentGallery);
+    currentImage = thumb.alt;
+    currentGallery.style.overflowX = 'hidden';
   }
 });
 
 // resize modal when screen size changes
 window.addEventListener("resize", () => {
   if (isModalShowing) {
-    imageResize()
+    imageResize();
   }
 });
 
+// toggle modals
+let touchStartX;
+const imageContainer = document.getElementById('modalImageContainer')
+imageContainer.addEventListener('touchstart', (event) => {
+  touchStartX = event.touches[0].clientX;
+  // alert(touchStartX);
+});
 
+imageContainer.addEventListener('touchend', (event) => {
+  const touchEndX = event.changedTouches[0].clientX;
+  const threshold = 50;
+
+  const galleries = document.getElementsByClassName('gallery');
+
+  if (touchEndX < touchStartX - threshold) {
+    // Swipe left
+    alert('Swipe left');
+  } else if (touchEndX > touchStartX + threshold) {
+    // Swipe right
+    alert('Swipe right');
+  }
+} );
+
+document.addEventListener('keydown', function(e) {
+  if (isModalShowing) {
+    let nextImage;
+    imagesInCurrentGallery.forEach((image, index) => {
+        if (image.alt === currentImage) {
+          if (e.key === 'ArrowRight' && index < imagesInCurrentGallery.length - 1) {
+            nextImage = imagesInCurrentGallery[index + 1];
+          }
+          if (e.key === 'ArrowLeft' && index > 0) {
+            nextImage = imagesInCurrentGallery[index - 1];
+          }
+        }
+      });
+    if (nextImage) {
+      const image = document.getElementById('myModalImage');
+      const title = document.getElementById('title');
+      modalImageContainer.removeChild(image);
+      modalTitleContainer.removeChild(title);
+      currentImage = nextImage.alt;
+      modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+      modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+    }
+  }
+});
 
 // helper functions
 function imageResize() {
@@ -117,3 +180,35 @@ function imageResize() {
      }, 0);
     }
 }
+
+// find all images in given gallery, add src and alt to array
+function getImages(gallery) {
+  const children = Array.from(gallery.children);
+  if (!children.length) {
+    return;
+  }
+  children.forEach(child => {
+    if (child.tagName === 'IMG') {
+      imagesInCurrentGallery.push({alt: child.alt, src: child.src});
+    } else {
+      getImages(child);
+    }
+  })
+}
+
+// find the gallery of the given images
+function getGallery(element) {
+  const parent = element.parentElement;
+  // end if we reach the top
+  if (!parent) {
+    return;
+  }
+  const classList = Array.from(parent.classList);
+  // crawl till we find the gallery
+  if (classList.includes('gallery')) {
+    currentGallery = parent;
+  } else {
+    getGallery(parent);
+  }
+}
+
