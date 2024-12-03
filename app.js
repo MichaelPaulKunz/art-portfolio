@@ -117,21 +117,34 @@ imageContainer.addEventListener('touchstart', (event) => {
   // alert(touchStartX);
 });
 
+// modal scroll phone
 imageContainer.addEventListener('touchend', (event) => {
   const touchEndX = event.changedTouches[0].clientX;
   const threshold = 50;
 
-  const galleries = document.getElementsByClassName('gallery');
+  let nextImage;
+    imagesInCurrentGallery.forEach((image, index) => {
+        if (image.alt === currentImage) {
+          if (touchEndX < touchStartX - threshold) {
+            nextImage = imagesInCurrentGallery[index + 1];
+          }
+          if (touchEndX > touchStartX + threshold) {
+            nextImage = imagesInCurrentGallery[index - 1];
+          }
+        }
+      });
+    if (nextImage) {
+      const image = document.getElementById('myModalImage');
+      const title = document.getElementById('title');
+      modalImageContainer.removeChild(image);
+      modalTitleContainer.removeChild(title);
+      currentImage = nextImage.alt;
+      modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+      modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+    }
+});
 
-  if (touchEndX < touchStartX - threshold) {
-    // Swipe left
-    alert('Swipe left');
-  } else if (touchEndX > touchStartX + threshold) {
-    // Swipe right
-    alert('Swipe right');
-  }
-} );
-
+// modal scroll laptop
 document.addEventListener('keydown', function(e) {
   if (isModalShowing) {
     let nextImage;
