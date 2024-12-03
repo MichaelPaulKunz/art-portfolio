@@ -109,30 +109,30 @@ window.addEventListener("resize", () => {
   }
 });
 
-// toggle modals
+// modal scroll phone
 let touchStartX;
-const imageContainer = document.getElementById('modalImageContainer')
+const imageContainer = document.getElementById('modalImageContainer');
+
 imageContainer.addEventListener('touchstart', (event) => {
   touchStartX = event.touches[0].clientX;
-  // alert(touchStartX);
-});
+}, {passive: true});
 
-// modal scroll phone
 imageContainer.addEventListener('touchend', (event) => {
   const touchEndX = event.changedTouches[0].clientX;
   const threshold = 50;
-
   let nextImage;
-    imagesInCurrentGallery.forEach((image, index) => {
-        if (image.alt === currentImage) {
-          if (touchEndX < touchStartX - threshold) {
-            nextImage = imagesInCurrentGallery[index + 1];
-          }
-          if (touchEndX > touchStartX + threshold) {
-            nextImage = imagesInCurrentGallery[index - 1];
-          }
+
+  imagesInCurrentGallery.forEach((image, index) => {
+      if (image.alt === currentImage) {
+        if (touchEndX < touchStartX - threshold && index < imagesInCurrentGallery.length - 1) {
+          nextImage = imagesInCurrentGallery[index + 1];
         }
-      });
+        if (touchEndX > touchStartX + threshold  && index > 0) {
+          nextImage = imagesInCurrentGallery[index - 1];
+        }
+      }
+    });
+
     if (nextImage) {
       const image = document.getElementById('myModalImage');
       const title = document.getElementById('title');
@@ -142,10 +142,13 @@ imageContainer.addEventListener('touchend', (event) => {
       modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
       modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
     }
+
+    imageResize();
 });
 
 // modal scroll laptop
 document.addEventListener('keydown', function(e) {
+  imageResize();
   if (isModalShowing) {
     let nextImage;
     imagesInCurrentGallery.forEach((image, index) => {
