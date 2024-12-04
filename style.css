@@ -347,3 +347,45 @@ footer {
   width: 60px;
   margin: 15px 30px
 }
+
+.vertical-scroll {
+  /* display: flex; */
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.gallery-image {
+  width: 75%;
+  text-align: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.contact-info {
+  width: 90%;
+  text-align: center;
+  justify-content: center;
+  margin: 20px;
+  background-color: black;
+  border-radius: 50px;
+}
+
+.contact-line {
+  text-align: left;
+  margin: 30px;
+  width: 80%;
+  margin-left: 10%;
+  -webkit-tap-highlight-color: blue;
+  font-size: 25px;
+  color: white;
+}
+
+.bio-page {
+  background: black;
+  border-radius: 50px;
+  border-color: white;
+  border-width: thin;
+  margin: 20px;
+}
