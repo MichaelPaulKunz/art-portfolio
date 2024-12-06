@@ -5,14 +5,39 @@ const dropDown = document.getElementById('dropDown');
 const backdrop = document.getElementById('dropdownBackdrop');
 topNav.onclick = function() {
   if (isDropdownShowing) {
-    dropDown.style.display = 'none';
-    backdrop.style.display = 'none';
+    dropDown.classList.add('fade-out');
+    backdrop.classList.add('fade-out');
+    setTimeout(() => {
+      dropDown.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 1000);
   } else {
-    backdrop.style.display = 'block';
+    dropDown.classList.remove('fade-out');
+    backdrop.classList.remove('fade-out');
+    dropDown.classList.add('fade-in');
+    backdrop.classList.add('fade-in');
     dropDown.style.display = 'block';
+    backdrop.style.display = 'block';
+
   }
   isDropdownShowing = !isDropdownShowing;
 }
+// make sure drop-down doesn't return when you navigate back (happens on cell phone sometimes)
+const sidebarItems = Array.from(document.getElementsByClassName('sidebar-item'));
+sidebarItems.forEach(item => {
+  item.onclick = function(e) {
+    console.log('hit');
+    isDropdownShowing = false;
+    dropDown.classList.add('fade-out');
+    backdrop.classList.add('fade-out');
+    setTimeout(() => {
+      dropDown.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 1000);
+  }
+})
+
+
 // side scrolling behavior
 const scrollContainers = document.getElementsByClassName('gallery');
 const backBtns = document.getElementsByClassName('backBtn');
@@ -40,30 +65,44 @@ let modalImage;
 let isModalShowing = false;
 const modal = document.getElementById("myModal");
 const exitModal = document.getElementById("exitModal");
-// exit modal from X button
-exitModal.onclick = function() {
-  isModalShowing = false;
-  modal.style.display = "none";
-  const image = document.getElementById('myModalImage');
-  const title = document.getElementById('title');
-  modalImageContainer.removeChild(image);
-  modalTitleContainer.removeChild(title);
+if (modal && exitModal) {
+  // exit modal from X button
+  exitModal.onclick = function() {
+    isModalShowing = false;
+    modal.classList.remove('fade-in');
+    modal.classList.add('fade-out');
+    const image = document.getElementById('myModalImage');
+    const title = document.getElementById('title');
+    image.classList.add('fade-out');
+    title.classList.add('fade-out');
+    setTimeout(function() {
+      modal.style.display = "none";
+      modalImageContainer.removeChild(image);
+      modalTitleContainer.removeChild(title);
+    }, 200);
 
-  currentGallery.style.overflowX = 'scroll';
-  imagesInCurrentGallery = [];
-  currentGallery = {};
-  currentImage = '';
+    currentGallery.style.overflowX = 'scroll';
+    imagesInCurrentGallery = [];
+    currentGallery = {};
+    currentImage = '';
+  }
 }
 
 // exit modal and dropdown by clicking outside of it
 window.onclick = function(event) {
   if (event.target == modal) {
     isModalShowing = false;
-    modal.style.display = "none";
+    modal.classList.remove('fade-in');
+    modal.classList.add('fade-out');
     const image = document.getElementById('myModalImage');
     const title = document.getElementById('title');
-    modalImageContainer.removeChild(image);
-    modalTitleContainer.removeChild(title);
+    image.classList.add('fade-out');
+    title.classList.add('fade-out');
+    setTimeout(function() {
+      modal.style.display = "none";
+      modalImageContainer.removeChild(image);
+      modalTitleContainer.removeChild(title);
+    }, 200);
 
 
     currentGallery.style.overflowX = 'scroll';
@@ -74,8 +113,12 @@ window.onclick = function(event) {
 
   if (event.target == backdrop) {
     isDropdownShowing = false;
-    dropDown.style.display = 'none';
-    backdrop.style.display = 'none';
+    dropDown.classList.add('fade-out');
+    backdrop.classList.add('fade-out');
+    setTimeout(() => {
+      dropDown.style.display = 'none';
+      backdrop.style.display = 'none';
+    }, 1000);
   }
 }
 
@@ -87,11 +130,15 @@ let currentGallery, currentImage;
 thumbs.forEach(thumb => {
   thumb.onclick = function() {
     isModalShowing = true;
-    modal.style.display = "block";
     modalImageContainer = document.getElementById("modalImageContainer");
     modalTitleContainer = document.getElementById("modalTitleContainer");
-    modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${thumb.alt}</h2>`;
-    modalImageContainer.innerHTML += `<a id='myModalImage' href=${thumb.src}><img class='modal-image' src=${thumb.src}></a>`;
+    modal.classList.remove('fade-out');
+    modal.classList.add('fade-in');
+    // modalImageContainer.classList.add('fade-in');
+    // modalTitleContainer.classList.add('fade-in');
+    modalTitleContainer.innerHTML += `<h2 class='modal-title fade-in' id='title''>${thumb.alt}</h2>`;
+    modalImageContainer.innerHTML += `<a id='myModalImage' href=${thumb.src}><img class='modal-image fade-in' src=${thumb.src}></a>`;
+    modal.style.display = "block";
     // resize for phone
     imageResize();
     // get gallery info for scrolling
@@ -113,65 +160,67 @@ window.addEventListener("resize", () => {
 let touchStartX;
 const imageContainer = document.getElementById('modalImageContainer');
 
-imageContainer.addEventListener('touchstart', (event) => {
-  touchStartX = event.touches[0].clientX;
-}, {passive: true});
+if (imageContainer) {
+  imageContainer.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0].clientX;
+  }, {passive: true});
 
-imageContainer.addEventListener('touchend', (event) => {
-  const touchEndX = event.changedTouches[0].clientX;
-  const threshold = 50;
-  let nextImage;
-
-  imagesInCurrentGallery.forEach((image, index) => {
-      if (image.alt === currentImage) {
-        if (touchEndX < touchStartX - threshold && index < imagesInCurrentGallery.length - 1) {
-          nextImage = imagesInCurrentGallery[index + 1];
-        }
-        if (touchEndX > touchStartX + threshold  && index > 0) {
-          nextImage = imagesInCurrentGallery[index - 1];
-        }
-      }
-    });
-
-    if (nextImage) {
-      const image = document.getElementById('myModalImage');
-      const title = document.getElementById('title');
-      modalImageContainer.removeChild(image);
-      modalTitleContainer.removeChild(title);
-      currentImage = nextImage.alt;
-      modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-      modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
-    }
-
-    imageResize();
-});
-
-// modal scroll laptop
-document.addEventListener('keydown', function(e) {
-  imageResize();
-  if (isModalShowing) {
+  imageContainer.addEventListener('touchend', (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
+    const threshold = 50;
     let nextImage;
+
     imagesInCurrentGallery.forEach((image, index) => {
         if (image.alt === currentImage) {
-          if (e.key === 'ArrowRight' && index < imagesInCurrentGallery.length - 1) {
+          if (touchEndX < touchStartX - threshold && index < imagesInCurrentGallery.length - 1) {
             nextImage = imagesInCurrentGallery[index + 1];
           }
-          if (e.key === 'ArrowLeft' && index > 0) {
+          if (touchEndX > touchStartX + threshold  && index > 0) {
             nextImage = imagesInCurrentGallery[index - 1];
           }
         }
       });
-    if (nextImage) {
-      const image = document.getElementById('myModalImage');
-      const title = document.getElementById('title');
-      modalImageContainer.removeChild(image);
-      modalTitleContainer.removeChild(title);
-      currentImage = nextImage.alt;
-      modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-      modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+
+      if (nextImage) {
+        const image = document.getElementById('myModalImage');
+        const title = document.getElementById('title');
+        modalImageContainer.removeChild(image);
+        modalTitleContainer.removeChild(title);
+        currentImage = nextImage.alt;
+        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+      }
+
+      imageResize();
+  });
+
+  // modal scroll laptop
+  document.addEventListener('keydown', function(e) {
+    imageResize();
+    if (isModalShowing) {
+      let nextImage;
+      imagesInCurrentGallery.forEach((image, index) => {
+          if (image.alt === currentImage) {
+            if (e.key === 'ArrowRight' && index < imagesInCurrentGallery.length - 1) {
+              nextImage = imagesInCurrentGallery[index + 1];
+            }
+            if (e.key === 'ArrowLeft' && index > 0) {
+              nextImage = imagesInCurrentGallery[index - 1];
+            }
+          }
+        });
+      if (nextImage) {
+        const image = document.getElementById('myModalImage');
+        const title = document.getElementById('title');
+        modalImageContainer.removeChild(image);
+        modalTitleContainer.removeChild(title);
+        currentImage = nextImage.alt;
+        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+      }
     }
-  }
-});
+  });
+}
 
 // helper functions
 function imageResize() {
