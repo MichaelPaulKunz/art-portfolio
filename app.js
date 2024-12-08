@@ -201,11 +201,20 @@ if (imageContainer) {
       let nextImage;
       imagesInCurrentGallery.forEach((image, index) => {
           if (image.alt === currentImage) {
-            if (e.key === 'ArrowRight' && index < imagesInCurrentGallery.length - 1) {
-              nextImage = imagesInCurrentGallery[index + 1];
+            if (e.key === 'ArrowRight') {
+              if(index < imagesInCurrentGallery.length - 1) {
+                nextImage = imagesInCurrentGallery[index + 1];
+              } else {
+                nextImage = imagesInCurrentGallery[0];
+              }
             }
-            if (e.key === 'ArrowLeft' && index > 0) {
-              nextImage = imagesInCurrentGallery[index - 1];
+            if (e.key === 'ArrowLeft') {
+              if (index > 0) {
+                nextImage = imagesInCurrentGallery[index - 1];
+              } else {
+                const lastInGallery = imagesInCurrentGallery.length - 1;
+                nextImage = imagesInCurrentGallery[lastInGallery];
+              }
             }
           }
         });
