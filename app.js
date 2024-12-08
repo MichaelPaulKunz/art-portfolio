@@ -182,16 +182,9 @@ if (imageContainer) {
       });
 
       if (nextImage) {
-        const image = document.getElementById('myModalImage');
-        const title = document.getElementById('title');
-        modalImageContainer.removeChild(image);
-        modalTitleContainer.removeChild(title);
-        currentImage = nextImage.alt;
-        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+        modalScroll(nextImage);
+        imageResize();
       }
-
-      imageResize();
   });
 
   // modal scroll laptop
@@ -219,13 +212,8 @@ if (imageContainer) {
           }
         });
       if (nextImage) {
-        const image = document.getElementById('myModalImage');
-        const title = document.getElementById('title');
-        modalImageContainer.removeChild(image);
-        modalTitleContainer.removeChild(title);
-        currentImage = nextImage.alt;
-        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+        modalScroll(nextImage);
+        imageResize();
       }
     }
   });
@@ -285,5 +273,16 @@ function getGallery(element) {
   } else {
     getGallery(parent);
   }
+}
+
+// scroll to next modal image
+function modalScroll(nextImage) {
+  const image = document.getElementById('myModalImage');
+        const title = document.getElementById('title');
+        modalImageContainer.removeChild(image);
+        modalTitleContainer.removeChild(title);
+        currentImage = nextImage.alt;
+        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
 }
 
