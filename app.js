@@ -108,6 +108,8 @@ thumbs.forEach(thumb => {
     currentImage = thumb.alt;
     // prevent thumbnails from scrolling while modal is visible
     currentGallery.style.overflowX = 'hidden';
+    // remove thumbnail button scroll buttons
+    changeScrollButtonDisplay('none');
   }
 });
 
@@ -275,6 +277,8 @@ function collapseModal() {
       imagesInCurrentGallery = [];
       currentGallery = {};
       currentImage = '';
+      // bring back thumbnail scrollers
+      changeScrollButtonDisplay('block')
 }
 
 // scroll to next modal image
@@ -286,5 +290,16 @@ function modalScroll(nextImage) {
   currentImage = nextImage.alt;
   modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
   modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+}
+
+// change back and next button display
+function changeScrollButtonDisplay(value) {
+  const back = Array.from(document.getElementsByClassName('backBtn'));
+  const next = Array.from(document.getElementsByClassName('nextBtn'));
+  const buttons = back.concat(next);
+  console.log(back, next, buttons);
+  buttons.forEach(button => {
+    button.style.display = value;
+  });
 }
 

@@ -234,6 +234,7 @@ a:active {
 
 .backBtn,
 .nextBtn {
+  display: block;
   width: 50px;
   cursor: pointer;
   margin: 15px;
