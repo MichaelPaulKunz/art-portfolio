@@ -392,7 +392,7 @@ footer {
 }
 
 .fade-in {
-	animation: fadeIn 1s;
+	animation: fadeIn 0.5s;
   	opacity: 1;
 }
 

@@ -38,7 +38,7 @@ sidebarItems.forEach(item => {
 })
 
 
-// side scrolling behavior
+// thumbnail side scrolling
 const scrollContainers = document.getElementsByClassName('gallery');
 const backBtns = document.getElementsByClassName('backBtn');
 const nextBtns = document.getElementsByClassName('nextBtn');
@@ -58,7 +58,7 @@ scrollArray.forEach((scroll, index) => {
   })
 });
 
-// image modal behavior
+// image modals
 let modalImageContainer;
 let modalTitleContainer;
 let modalImage;
