@@ -1,28 +1,26 @@
-// toggle hamburger menu
+/**
+ * toggle hamburger menu
+ */
+
 let isDropdownShowing = false;
 const topNav = document.getElementById('topNav');
 const dropDown = document.getElementById('dropDown');
 const backdrop = document.getElementById('dropdownBackdrop');
 topNav.onclick = function() {
   if (isDropdownShowing) {
-    dropDown.classList.add('fade-out');
-    backdrop.classList.add('fade-out');
-    setTimeout(() => {
-      dropDown.style.display = 'none';
-      backdrop.style.display = 'none';
-    }, 1000);
+    collapseDropdown();
   } else {
+    // open dropdown
     dropDown.classList.remove('fade-out');
     backdrop.classList.remove('fade-out');
     dropDown.classList.add('fade-in');
     backdrop.classList.add('fade-in');
     dropDown.style.display = 'block';
     backdrop.style.display = 'block';
-
+    isDropdownShowing = true;
   }
-  isDropdownShowing = !isDropdownShowing;
 }
-// make sure drop-down doesn't return when you navigate back (happens on cell phone sometimes)
+// make sure drop-down doesn't return when you navigate back (happens on phone sometimes)
 const sidebarItems = Array.from(document.getElementsByClassName('sidebar-item'));
 sidebarItems.forEach(item => {
   item.onclick = function(e) {
@@ -38,7 +36,9 @@ sidebarItems.forEach(item => {
 })
 
 
-// side scrolling behavior
+/**
+ * thumbnail side scrolling
+ */
 const scrollContainers = document.getElementsByClassName('gallery');
 const backBtns = document.getElementsByClassName('backBtn');
 const nextBtns = document.getElementsByClassName('nextBtn');
@@ -58,7 +58,9 @@ scrollArray.forEach((scroll, index) => {
   })
 });
 
-// image modal behavior
+/**
+ * image modals
+ */
 let modalImageContainer;
 let modalTitleContainer;
 let modalImage;
@@ -68,57 +70,18 @@ const exitModal = document.getElementById("exitModal");
 if (modal && exitModal) {
   // exit modal from X button
   exitModal.onclick = function() {
-    isModalShowing = false;
-    modal.classList.remove('fade-in');
-    modal.classList.add('fade-out');
-    const image = document.getElementById('myModalImage');
-    const title = document.getElementById('title');
-    image.classList.add('fade-out');
-    title.classList.add('fade-out');
-    setTimeout(function() {
-      modal.style.display = "none";
-      modalImageContainer.removeChild(image);
-      modalTitleContainer.removeChild(title);
-    }, 200);
-
-    currentGallery.style.overflowX = 'scroll';
-    imagesInCurrentGallery = [];
-    currentGallery = {};
-    currentImage = '';
+    collapseModal();
   }
 }
 
 // exit modal and dropdown by clicking outside of it
 window.onclick = function(event) {
   if (event.target == modal) {
-    isModalShowing = false;
-    modal.classList.remove('fade-in');
-    modal.classList.add('fade-out');
-    const image = document.getElementById('myModalImage');
-    const title = document.getElementById('title');
-    image.classList.add('fade-out');
-    title.classList.add('fade-out');
-    setTimeout(function() {
-      modal.style.display = "none";
-      modalImageContainer.removeChild(image);
-      modalTitleContainer.removeChild(title);
-    }, 200);
-
-
-    currentGallery.style.overflowX = 'scroll';
-    imagesInCurrentGallery = [];
-    currentGallery = {};
-    currentImage = '';
+    collapseModal();
   }
 
   if (event.target == backdrop) {
-    isDropdownShowing = false;
-    dropDown.classList.add('fade-out');
-    backdrop.classList.add('fade-out');
-    setTimeout(() => {
-      dropDown.style.display = 'none';
-      backdrop.style.display = 'none';
-    }, 1000);
+    collapseDropdown();
   }
 }
 
@@ -134,8 +97,6 @@ thumbs.forEach(thumb => {
     modalTitleContainer = document.getElementById("modalTitleContainer");
     modal.classList.remove('fade-out');
     modal.classList.add('fade-in');
-    // modalImageContainer.classList.add('fade-in');
-    // modalTitleContainer.classList.add('fade-in');
     modalTitleContainer.innerHTML += `<h2 class='modal-title fade-in' id='title''>${thumb.alt}</h2>`;
     modalImageContainer.innerHTML += `<a id='myModalImage' href=${thumb.src}><img class='modal-image fade-in' src=${thumb.src}></a>`;
     modal.style.display = "block";
@@ -145,7 +106,10 @@ thumbs.forEach(thumb => {
     getGallery(thumb);
     getImages(currentGallery);
     currentImage = thumb.alt;
+    // prevent thumbnails from scrolling while modal is visible
     currentGallery.style.overflowX = 'hidden';
+    // remove thumbnail button scroll buttons
+    changeScrollButtonDisplay('none');
   }
 });
 
@@ -172,26 +136,28 @@ if (imageContainer) {
 
     imagesInCurrentGallery.forEach((image, index) => {
         if (image.alt === currentImage) {
-          if (touchEndX < touchStartX - threshold && index < imagesInCurrentGallery.length - 1) {
-            nextImage = imagesInCurrentGallery[index + 1];
+          if (touchEndX < touchStartX - threshold) {
+            if (index < imagesInCurrentGallery.length - 1) {
+              nextImage = imagesInCurrentGallery[index + 1];
+            } else {
+              nextImage = imagesInCurrentGallery[0];
+            }
           }
-          if (touchEndX > touchStartX + threshold  && index > 0) {
-            nextImage = imagesInCurrentGallery[index - 1];
+          if (touchEndX > touchStartX + threshold) {
+            if (index > 0) {
+              nextImage = imagesInCurrentGallery[index - 1];
+            } else {
+              const lastInGallery = imagesInCurrentGallery.length - 1;
+              nextImage = imagesInCurrentGallery[lastInGallery];
+            }
           }
         }
       });
 
       if (nextImage) {
-        const image = document.getElementById('myModalImage');
-        const title = document.getElementById('title');
-        modalImageContainer.removeChild(image);
-        modalTitleContainer.removeChild(title);
-        currentImage = nextImage.alt;
-        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+        modalScroll(nextImage);
+        imageResize();
       }
-
-      imageResize();
   });
 
   // modal scroll laptop
@@ -201,22 +167,26 @@ if (imageContainer) {
       let nextImage;
       imagesInCurrentGallery.forEach((image, index) => {
           if (image.alt === currentImage) {
-            if (e.key === 'ArrowRight' && index < imagesInCurrentGallery.length - 1) {
-              nextImage = imagesInCurrentGallery[index + 1];
+            if (e.key === 'ArrowRight') {
+              if(index < imagesInCurrentGallery.length - 1) {
+                nextImage = imagesInCurrentGallery[index + 1];
+              } else {
+                nextImage = imagesInCurrentGallery[0];
+              }
             }
-            if (e.key === 'ArrowLeft' && index > 0) {
-              nextImage = imagesInCurrentGallery[index - 1];
+            if (e.key === 'ArrowLeft') {
+              if (index > 0) {
+                nextImage = imagesInCurrentGallery[index - 1];
+              } else {
+                const lastInGallery = imagesInCurrentGallery.length - 1;
+                nextImage = imagesInCurrentGallery[lastInGallery];
+              }
             }
           }
         });
       if (nextImage) {
-        const image = document.getElementById('myModalImage');
-        const title = document.getElementById('title');
-        modalImageContainer.removeChild(image);
-        modalTitleContainer.removeChild(title);
-        currentImage = nextImage.alt;
-        modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
-        modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+        modalScroll(nextImage);
+        imageResize();
       }
     }
   });
@@ -262,7 +232,7 @@ function getImages(gallery) {
   })
 }
 
-// find the gallery of the given images
+// find the gallery of the given image
 function getGallery(element) {
   const parent = element.parentElement;
   // end if we reach the top
@@ -276,5 +246,60 @@ function getGallery(element) {
   } else {
     getGallery(parent);
   }
+}
+
+function collapseDropdown() {
+  isDropdownShowing = false;
+  dropDown.classList.add('fade-out');
+  backdrop.classList.add('fade-out');
+  setTimeout(() => {
+    dropDown.style.display = 'none';
+    backdrop.style.display = 'none';
+  }, 1000);
+}
+
+function collapseModal() {
+  isModalShowing = false;
+      modal.classList.remove('fade-in');
+      modal.classList.add('fade-out');
+      const image = document.getElementById('myModalImage');
+      const title = document.getElementById('title');
+      image.classList.add('fade-out');
+      title.classList.add('fade-out');
+      setTimeout(function() {
+        modal.style.display = "none";
+        modalImageContainer.removeChild(image);
+        modalTitleContainer.removeChild(title);
+      }, 200);
+
+      // bring back thumnbail scrolling
+      currentGallery.style.overflowX = 'scroll';
+      imagesInCurrentGallery = [];
+      currentGallery = {};
+      currentImage = '';
+      // bring back thumbnail scrollers
+      changeScrollButtonDisplay('block')
+}
+
+// scroll to next modal image
+function modalScroll(nextImage) {
+  const image = document.getElementById('myModalImage');
+  const title = document.getElementById('title');
+  modalImageContainer.removeChild(image);
+  modalTitleContainer.removeChild(title);
+  currentImage = nextImage.alt;
+  modalTitleContainer.innerHTML += `<h2 class='modal-title' id='title''>${nextImage.alt}</h2>`;
+  modalImageContainer.innerHTML += `<a id='myModalImage' href=${nextImage.src}><img class='modal-image' src=${nextImage.src}></a>`;
+}
+
+// change back and next button display
+function changeScrollButtonDisplay(value) {
+  const back = Array.from(document.getElementsByClassName('backBtn'));
+  const next = Array.from(document.getElementsByClassName('nextBtn'));
+  const buttons = back.concat(next);
+  console.log(back, next, buttons);
+  buttons.forEach(button => {
+    button.style.display = value;
+  });
 }
 

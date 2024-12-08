@@ -234,6 +234,7 @@ a:active {
 
 .backBtn,
 .nextBtn {
+  display: block;
   width: 50px;
   cursor: pointer;
   margin: 15px;
@@ -392,7 +393,7 @@ footer {
 }
 
 .fade-in {
-	animation: fadeIn 1s;
+	animation: fadeIn 0.5s;
   	opacity: 1;
 }
 
